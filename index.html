@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل GitHub Student Developer Pack الشامل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --primary: #58a6ff;
+            --secondary: #8b949e;
+            --accent: #f78166;
+            --green: #3fb950;
+            --purple: #bc8cff;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-bright: #f0f6fc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+
+        header { text-align: center; padding: 4rem 2rem 2rem; background: linear-gradient(135deg, #1a1e25 0%, #0d1117 100%); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(88,166,255,0.1) 0%, transparent 60%); animation: pulse 6s infinite alternate; }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+        h1 { color: var(--text-bright); font-size: 3rem; margin-bottom: 1rem; position: relative; }
+        h1 i { color: var(--green); margin-left: 10px; }
+        .subtitle { font-size: 1.2rem; color: var(--secondary); max-width: 800px; margin: 0 auto; position: relative; }
+
+        .navbar { display: flex; justify-content: center; gap: 1rem; background: var(--card-bg); padding: 1rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+        .nav-link { color: var(--secondary); text-decoration: none; font-weight: 700; font-size: 1.1rem; padding: 0.5rem 1.5rem; border-radius: 8px; transition: all 0.3s; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: var(--primary); color: var(--bg-color); }
+
+        .view-container { display: none; }
+        .view-container.active-view { display: block; }
+
+        .controls { display: flex; flex-direction: column; align-items: center; padding: 2rem; gap: 1.5rem; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+        .search-box { width: 100%; max-width: 600px; position: relative; }
+        .search-box input { width: 100%; padding: 12px 20px 12px 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-bright); font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        .search-box input:focus { border-color: var(--primary); }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--secondary); }
+
+        .tabs { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .tab-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--secondary); cursor: pointer; transition: all 0.3s; font-weight: 600; }
+        .tab-btn:hover, .tab-btn.active { background: var(--primary); color: var(--bg-color); border-color: var(--primary); }
+
+        .filter-group { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
+        .filter-btn { padding: 6px 14px; border-radius: 16px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); cursor: pointer; font-size: 0.85rem; transition: all 0.3s; }
+        .filter-btn:hover, .filter-btn.active { background: var(--purple); color: white; border-color: var(--purple); }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+        
+        /* Section Titles */
+        .section-title { color: var(--primary); font-size: 2rem; text-align: center; margin: 2rem 0; position: relative; }
+        .section-title::after { content: ''; display: block; width: 80px; height: 4px; background: var(--purple); margin: 10px auto 0; border-radius: 2px; }
+
+        /* Experience Cards */
+        .exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .exp-card { background: linear-gradient(145deg, #1a2233 0%, #161b22 100%); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: transform 0.3s, border-color 0.3s; }
+        .exp-card:hover { transform: translateY(-5px); border-color: var(--purple); }
+        .exp-icon { font-size: 2.5rem; color: var(--purple); margin-bottom: 1rem; }
+        .exp-name { font-size: 1.4rem; color: var(--text-bright); font-weight: 700; margin-bottom: 10px; }
+        .exp-desc { color: var(--secondary); font-size: 0.95rem; margin-bottom: 15px; }
+        .exp-list { list-style: none; }
+        .exp-list li { margin-bottom: 8px; padding-right: 15px; position: relative; color: var(--text-main); font-size: 0.9rem; }
+        .exp-list li::before { content: '•'; color: var(--green); position: absolute; right: 0; font-weight: bold; }
+        .exp-list strong { color: var(--accent); }
+        .exp-partners { margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border); }
+        .partner-badge { display: inline-block; background: rgba(88, 166, 255, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; margin: 4px 2px; font-weight: 600; }
+
+        /* Offer/Tool Cards */
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; display: flex; flex-direction: column; gap: 12px; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-color: var(--primary); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-title { font-size: 1.3rem; color: var(--text-bright); font-weight: 700; }
+        .duration-badge { background: rgba(63, 185, 80, 0.1); color: var(--green); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+        .category-tag { align-self: flex-start; background: rgba(188, 140, 255, 0.1); color: var(--purple); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+        .desc { color: var(--secondary); font-size: 0.95rem; }
+        .offer-box { background: rgba(88, 166, 255, 0.05); border-right: 3px solid var(--primary); padding: 10px 15px; border-radius: 4px; }
+        .offer-title { color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+        .offer-text { font-size: 0.9rem; color: var(--text-main); }
+        .benefit-box { margin-top: auto; }
+        .benefit-title { color: var(--accent); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+        .benefit-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.5; }
+        .no-results { text-align: center; color: var(--secondary); font-size: 1.5rem; padding: 4rem; grid-column: 1 / -1; }
+
+        /* Developer Page */
+        .dev-container { max-width: 600px; margin: 3rem auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 3rem 2rem; text-align: center; }
+        .dev-avatar { font-size: 4rem; color: var(--primary); margin-bottom: 1rem; }
+        .dev-name { color: var(--text-bright); font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem; }
+        .dev-title { color: var(--purple); font-size: 1.2rem; font-weight: 600; margin-bottom: 2rem; }
+        .dev-links { display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+        .dev-link { display: inline-flex; align-items: center; gap: 10px; background: var(--bg-color); border: 1px solid var(--border); padding: 12px 24px; border-radius: 12px; color: var(--text-main); text-decoration: none; font-weight: 600; transition: all 0.3s; width: 100%; justify-content: center; }
+        .dev-link:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+        footer { text-align: center; padding: 3rem; border-top: 1px solid var(--border); color: var(--secondary); margin-top: 3rem; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .grid, .exp-grid { grid-template-columns: 1fr; }
+            .controls { padding: 1rem; }
+            .navbar { gap: 0.5rem; }
+            .nav-link { font-size: 0.9rem; padding: 0.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-brands fa-github"></i> دليل الطالب الشامل لـ GitHub Pack</h1>
+        <p class="subtitle">اكتشف المهارات اللي تقدر تتعلمها والأدوات اللي هتاخدها مجاناً كطالب. إزاي بتخدمك؟ المدة قد إيه؟ وهتفيدك في إيه بالظبط في مسيرتك!</p>
+    </header>
+
+    <nav class="navbar">
+        <a class="nav-link active" onclick="switchView('home')">الرئيسية</a>
+         <a class="nav-link" onclick="scrollToOffers()">جميع العروض</a>
+        <a class="nav-link" onclick="switchView('filter')">الفلترة</a>
+        <a class="nav-link" onclick="switchView('developer')">مطور المشروع</a>
+    </nav>
+
+    <!-- Home View -->
+    <div id="home-view" class="view-container active-view">
+        <div class="controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="homeSearchInput" placeholder="ابحث عن أداة معينة (مثل: Azure, JetBrains, Domain)...">
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- Experiences Section -->
+            <h2 class="section-title" id="expTitle"><i class="fas fa-rocket"></i> المسارات والمهارات (Experiences)</h2>
+            <p id="expDesc" style="text-align:center; color:var(--secondary); margin-bottom: 2rem;">مسارات متكاملة صممها GitHub وشركاؤه لتعلم مهارات محددة من الصفر باستخدام أدوات حقيقية.</p>
+            <div class="exp-grid" id="expGrid"></div>
+
+            <!-- All Offers Section -->
+            <h2 class="section-title" id="offersTitle"><i class="fas fa-boxes-stacked"></i> جميع الخدمات والعروض (Offers)</h2>
+            <div class="grid" id="homeGrid"></div>
+        </div>
+        <footer>
+            <p>© حقوق الطبع محفوظة - دليل GitHub Student Developer Pack الشامل 2024</p>
+        </footer>
+    </div>
+
+    <!-- Filter View -->
+    <div id="filter-view" class="view-container">
+        <div class="controls">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('category')">تصنيف حسب القسم</button>
+                <button class="tab-btn" onclick="switchTab('duration')">تصنيف حسب المدة</button>
+            </div>
+            <div id="filterButtons" class="filter-group"></div>
+        </div>
+        <div class="container">
+            <div class="grid" id="filterGrid"></div>
+        </div>
+    </div>
+
+    <!-- Developer View -->
+    <div id="developer-view" class="view-container">
+        <div class="dev-container">
+            <div class="dev-avatar"><i class="fas fa-laptop-code"></i></div>
+            <h2 class="dev-name">Al-Hasan Adel Hamed</h2>
+            <p class="dev-title">Data Science | Data Analysis</p>
+            <div class="dev-links">
+                <a href="mailto:alhasanadel0@gmail.com" class="dev-link">
+                    <i class="fas fa-envelope"></i> Gmail
+                </a>
+                <a href="https://www.linkedin.com/in/alhasanadel" target="_blank" class="dev-link">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات المهارات (Experiences)
+        const rawExperiences = [
+            { icon: "fa-brain", name: "Intro to Copilot", desc: "مسار لتعلم إزاي تستخدم الذكاء الاصطناعي في كتابة الكود وتسريع شغلك.", benefit: "هتفيدك إنك تكتب كود أسرع بمراحل وتقلل الأخطاء البرمجية.", teach: "هتعلملك إزاي تعمل Setup لـ Copilot، إزاي تكتب Prompts جيدة، وإزاي تدور على الأخطاء بالـ AI.", partners: ["GitHub", "GitHub Copilot", "GitHub Codespaces", "Visual Studio Code"] },
+            { icon: "fa-file-code", name: "Understanding Markdown", desc: "لغة توصيف خفيفة لتنسيق النصوص، هي اللغة الرسمية لكتابة الـ README والملفات على GitHub.", benefit: "هتفيدك إنك توثق مشاريعك بشكل احترافي يخلي أي مطور يفهم كودك بمجرد النظر.", teach: "هتعلملك أساسيات الـ Markdown، إزاي تعمل جداول، لينكات، وصور، وإزاي تستخدمها في الـ Issues والـ PRs.", partners: ["GitHub"] },
+            { icon: "fa-code-branch", name: "Intro to GitHub", desc: "تعلم أساسيات سير العمل على GitHub (GitHub Flow) من غير ما تكون مطور محترف.", benefit: "هتفيدك إنك تقدر تتعاون مع أي فريق برمجي وتدير نسخ كودك (Version Control) بطريقة صحيحة.", teach: "هتعلملك إزاي تعمل Repositories، إزاي تعمل Branches، وإزاي تعمل Pull Requests و Merge.", partners: ["GitHub"] },
+            { icon: "fa-certificate", name: "GitHub Foundations Certification", desc: "كل اللي محتاجه عشان تحضر لامتحان شهادة GitHub الرسمية وتنجح فيها.", benefit: "هتفيدك إنك تثبت مهاراتك لسوق العمل بشهادة معتمدة عالمياً بتفتحلك بيبان توظيف.", teach: "هتعلملك أساسيات الـ Git، مفاهيم الـ Cloud، و إزاي تدير المشاريع على GitHub.", partners: ["DataCamp", "GitHub", "Microsoft Azure"] },
+            { icon: "fa-hand-holding-heart", name: "Intro to Open Source", desc: "دليلك الشامل عشان تبدأ تساهم في المشاريع مفتوحة المصدر وتكبر شبكتك.", benefit: "هتفيدك إنك تبني Portfolio قوي جداً لما تشارك في مشاريع عالمية الشركات بتشوفها.", teach: "هتعلملك إزاي تلاقي مشاريع تناسبك، إزاي تعمل Fork و PR، وثقافة الـ Open Source.", partners: ["Travis CI", "GitHub", "OpenSauced", "GitHub Codespaces"] },
+            { icon: "fa-robot", name: "AI Prompting & Technical Writing", desc: "إزاي تكتب أوامر (Prompts) للذكاء الاصطناعي وتكتب توثيقات فنية محترفة.", benefit: "هتفيدك إنك توفر وقتك مع الـ AI وتكتب دليلاً مستخدماً (Documentation) لمشاريعك يفهمه أي حد.", teach: "هتعلملك هندسة الـ Prompts، إزاي تكتب README احترافي، وإزاي توثق الـ APIs.", partners: ["GitHub", "Microsoft Azure", "Educative", "POEditor"] },
+            { icon: "fa-shield-halved", name: "Security and Monitoring", desc: "تعلم إزاي تحمي كودك وتحمي بنيتك التحتية وتراقب أداء تطبيقاتك.", benefit: "هتفيدك إنك تبقى مطور يقدر يحمي مشاريعه من الاختراق ويكتشف الأعطال قبل ما المستخدم يشوفها.", teach: "هتعلملك أساسيات أمن المعلومات، إزاي تعمل Scan للكود، وإزاي تراقب السيرفرات.", partners: ["GitHub", "Blackfire", "Honeybadger", "AstraSecurity"] },
+            { icon: "fa-briefcase", name: "Career Readiness", desc: "استعد لسوق العمل سواء كنت قريب من التخرج أو عايز تبدأ بدري.", benefit: "هتفيدك إنك تعرف إزاي تقدم على الشغل، إزاي تحل اختبارات الـ Coding، وتجهز بورتفوليو.", teach: "هتعلملك إزاي تعدّي الـ Interviews، إزاي تكتب الـ CV، وتنظم وقتك.", partners: ["Educative", "InterviewCake", "DailyBot", "GitHub Pages"] },
+            { icon: "fa-globe", name: "Intro to Web Dev", desc: "خطوتك الأولى لبناء موقعك على الإنترنت من الصفر.", benefit: "هتفيدك إنك تقدر تعمل موقع شخصي أو لمشروعك بدل ما تفضل شغال Local.", teach: "هتعلملك أساسيات HTML/CSS، إزاي تعمل الموقع Responsive، وإزاي تنشره (Deploy).", partners: ["LambdaTest", "Polypane", "Bootstrap Studio", "DigitalOcean"] },
+            { icon: "fa-cloud", name: "Hackathon in the Cloud", desc: "كل اللي محتاجه عشان تنظم أو تشارك في هاكاثون أونلاين بنجاح.", benefit: "هتفيدك إنك تختبر مهاراتك تحت الضغط، تتعلم شغل الفرق، واكتشاف تقنيات جديدة في وقت قصير.", teach: "هتعلملك إزاي تبني فكرة في وقت قصير، إزاي تنظم الـ Team، وإزاي تستخدم السحابة في الهاكاثون.", partners: ["GitHub Pages", "HackMIT", "Visual Studio Code", "GitLens"] },
+            { icon: "fa-palette", name: "Aspiring Creatives", desc: "مسار للمبدعين اللي عايزين يطوروا مهاراتهم في التصميم والتعاون الفني.", benefit: "هتفيدك إنك تخرج من دايرة البرمجة المملة وتضيف لمسة جمالية لمشاريعك الـ UI/UX.", teach: "هتعلملك إزاي تصمم واجهات جذابة، إزاي تختار الألوان والأيقونات، وإزاي تتعامل مع الأصول (Assets).", partners: ["Icons8", "Octicons", "IconScout"] },
+            { icon: "fa-chart-line", name: "Data Science & Machine Learning", desc: "ادخل عالم تحليل البيانات والذكاء الاصطناعي العملي.", benefit: "هتفيدك إنك تتعلم أقوى المجالات اللي بقت مطلوبة جداً في سوق العمل وتقدر تستخرج رؤى من البيانات.", teach: "هتعلملك تنظيف البيانات، بناء النماذج (Models)، وتصوير البيانات (Visualization).", partners: ["Datadog", "SQLGate", "GitHub Codespaces", "Deepnote"] },
+            { icon: "fa-mobile-screen-button", name: "Mobile App Development", desc: "حول فكرتك لتطبيق موبايل حقيقي يعمل على Android و iOS.", benefit: "هتفيدك إنك تاخد أول خطوة في سوق التطبيقات الضخم وتعمل منتج الناس تستخدمه على موبايلاتها.", teach: "هتعلملك إزاي تبني UI للموبايل، إزاي تربطه بـ Backend، وإزاي تختبره على أجهزة حقيقية.", partners: ["Microsoft Azure", "FrontendMasters", "LambdaTest", "NativeScript"] },
+            { icon: "fa-gears", name: "Developer Operations (DevOps)", desc: "تعلم إزاي تدمج التطوير مع التشغيل عشان تطلع كود أسرع وأأمن.", benefit: "هتفيدك إنك تبقى مطور بيقدر ينظم سير العمل (CI/CD)، ويضمن إن الكود بيشتغل صح في كل مرة.", teach: "هتعلملك الـ Continuous Integration، إزاي تعمل Automation للـ Tests، وإزاي تراقب الأخطاء.", partners: ["Travis CI", "GitHub", "Sentry", "BrowserStack"] },
+            { icon: "fa-video", name: "Virtual Event Kit", desc: "كل اللي محتاجه لتنظيم فعاليات تقنية أونلاين ناجحة ومتفاعلة.", benefit: "هتفيدك إنك تقدر تعمل Events لجامعتك أو مجتمعك التقني وتبنى شبكة علاقاتك.", teach: "هتعلملك إزاي تنشر الدعوة، إزاي تدير الحضور، وإزاي توفر بيئة آمنة للفعالية.", partners: ["Namecheap", "Microsoft Azure", "Name.com"] },
+            { icon: "fa-users-gear", name: "Explore GitHub & Campus Experts", desc: "اكتشف مجتمع GitHub وكل الفرق، وازاي تبقى قائد تقني في جامعتك.", benefit: "هتفيدك إنك تتكامل مع مجتمع المصادر المفتوحة وتاخذ دعم مباشر من GitHub.", teach: "هتعلملك إزاي تلاقى مجتمعات، إزاي تبني مجتمع محلي في كليتك، وتستغل برامج GitHub التعليمية.", partners: ["GitHub", "Github Campus Experts"] },
+            { icon: "fa-id-badge", name: "Profile README", desc: "إزاي تعمل صفحة شخصية احترافية على بروفايلك في GitHub.", benefit: "هتفيدك إنك تبقى متميز عن باقي المطورين لما أي حد يفتح بروفايلك يشوفك منظم ومحترف.", teach: "هتعلملك إزاي تعمل Repository باسمك، إزاي تكتب فيها الـ Markdown، وتعرض مهاراتك.", partners: ["GitHub"] },
+            { icon: "fa-terminal", name: "Primer: Codespaces", desc: "دليلك السريع لاستخدام Codespaces كبيئة تطوير سحابية فورية.", benefit: "هتفيدك إنك تبدأ تبرمج من أي جهاز في الدنيا من غير ما تنزل أي حاجة.", teach: "هتعلملك إزاي تعدل الكود في السحابة، إزاي تختبره، وإزاي تربطه بـ GitHub.", partners: ["GitHub Codespaces"] },
+            { icon: "fa-js", name: "Launchpad: Intro to Javascript", desc: "أول خطوة في عالم البرمجة باستخدام لغة الويب الأولى عالمياً.", benefit: "هتفيدك إنك تدخل عالم الـ Frontend والـ Backend بأقوى لغة مطلوبة في السوق.", teach: "هتعلملك المتغيرات، الدوال، التعامل مع الـ DOM، وأساسيات المنطق البرمجي.", partners: ["Scrimba"] }
+        ];
+
+                // بيانات الخدمات 
+        const rawTools = [
+            // Cloud & Hosting
+            { name: "DigitalOcean", category: "Cloud", duration: "سنة واحدة", desc: "استضافة سحابية بسيطة ومبنية خصيصاً للمطورين لبناء وتوسيع تطبيقاتهم.", offer: "رصيد 200 دولار لمدة سنة.", benefit: "هتفيدك إنك تقدر ترفع مشاريعك (Backend, APIs, Databases) على سيرفرات حقيقية بكلفة صفرية، بدل ما مشروعك يفضل شغال Local على جهازك بس." },
+            { name: "Microsoft Azure", category: "Cloud", duration: "طوال فترة الدراسة", desc: "وصول لخدمات سحابة مايكروسوفت ومواردها التعليمية بدون الحاجة لكارت بنكي (لطلاب 18+).", offer: "وصول مجاني لـ 25+ خدمة سحابية + رصيد 100 دولار.", benefit: "أقوى عرض عشان تتعلم Cloud Computing عملياً. تقدر تعمل Machines، ترفع مواقع، وتجرب خدمات الـ AI بتاعة مايكروسوفت من غير ما تدفع قرش." },
+            { name: "Microsoft Azure (للأعمار 13-17)", category: "Cloud", duration: "طوال فترة الدراسة", desc: "نسخة مخصصة من Azure للطلاب الأصغر سناً لتعلم السحابة بأمان.", offer: "وصول مجاني لخدمات محددة (App Services, Functions, MySQL).", benefit: "فرصة ممتازة للطلاب في المدرسة يبدأوا يتعلموا على السحابة ويعملوا مشاريع بسيطة من غير كارت بنكي أو مخاوف من استهلاك الرصيد." },
+            { name: "Heroku", category: "Cloud", duration: "سنتين", desc: "منصة مرنة وسهلة الاستخدام لنشر وتشغيل وإدارة التطبيقات.", offer: "رصيد 13 دولار شهرياً لمدة 24 شهر.", benefit: "لو مش عايز تتعب في إعداد السيرفرات (DevOps)، Heroku هيسهّلك الموضوع. بـ أمر واحد بترفع الـ Code بتاعك وبيشتغل أونلاين. الرصيد كافي لتشغيل تطبيق متوسط." },
+            { name: "GitHub Codespaces", category: "Cloud", duration: "طوال فترة الدراسة", desc: "بيئة تطوير سحابية آمنة وقابلة للتخصيص تعمل من أي مكان.", offer: "وصول مجاني لمستوى Pro.", benefit: "بتعملك جهاز كمبيوتر كامل في المتصفح بـ IDE جاهز. مفيد جداً لو جهازك ضعيف، أو عايز تكتب كود من أي مكان من غير ما تنزل حاجة." },
+            { name: "LocalStack", category: "Cloud", duration: "طوال فترة الدراسة", desc: "محاكي لخدمات Amazon AWS يعمل على جهازك الشخصي.", offer: "رخصة مجانية كاملة للنسخة السحابية.", benefit: "بدل ما تدفع فلوس عشان تجرب على AWS، LocalStack بيديك بيئة AWS وهمية على جهازك لتختبر كودك قبل ما ترفعه للسحابة الحقيقية." },
+            { name: "Camber", category: "Cloud", duration: "طوال فترة الدراسة", desc: "منصة سحابية مدعومة بالذكاء الاصطناعي مخصصة للحوسبة العلمية والمحاكاة.", offer: "خطة الطالب المجانية (200 ساعة معالجة، 75 جيجا تخزين، 200 رسالة AI شهرياً).", benefit: "لو طالب في كلية هندسة، فيزياء، أو علم بيانات وبتعمل محاكاة (Simulations) بتحتاج قوة معالجة ضخمة، دي هتوفر عليك فلوس كتير." },
+
+            // Domains & Web Hosting
+            { name: "Name.com", category: "Domains & Hosting", duration: "سنة واحدة", desc: "تسجيل نطاقات، استضافة، وأدوات بناء مواقع.", offer: "نطاق (Domain) مجاني لمدة سنة من الامتدادات المتاحة (.live, .studio, .app, .dev).", benefit: "أول خطوة عشان تظهر للعالم! بدل ما بعت بورتفوليو بـ GitHub Link، هتبقى عندك موقعك الشخصي مثلاً ahmed.dev وده بيرفع قيمتك المهنية جداً." },
+            { name: "Namecheap", category: "Domains & Hosting", duration: "سنة واحدة", desc: "تسجيل نطاقات وإدارتها بأسعار مناسبة.", offer: "تسجيل نطاق .me مجاني لمدة سنة + شهادة SSL مجانية سنة.", benefit: "نطاق .me ممتاز جداً للمواقع الشخصية (مثلاً mohamed.me)، والـ SSL بيخلي موقعك يبقى آمن (HTTPS) وده ضروري لأي موقع محترف." },
+            { name: ".TECH Domains", category: "Domains & Hosting", duration: "سنة واحدة", desc: "امتداد نطاق قوي يدل على انتمائك لقطاع التكنولوجيا.", offer: "نطاق .TECH مجاني لمدة سنة.", benefit: "امتداد .tech بيدي انطباع إنك مطور تقني، ممتاز لمشاريع التخرج أو الـ Startups التقنية بتاعتك." },
+            { name: "GitHub Pages", category: "Domains & Hosting", duration: "طوال فترة الدراسة", desc: "استضافة مواقع ثابتة (Static) مباشرة من مستودعات GitHub.", offer: "موقع واحد لكل حساب + عدد غير محدود من مواقع المشاريع.", benefit: "أفضل طريقة لرفع مواقع الـ Frontend (HTML/CSS/JS أو React) بتاعتك مجاناً وبسهولة تامة من غير أي إعدادات سيرفر." },
+
+            // IDEs & Dev Tools
+            { name: "GitHub Copilot", category: "Dev Tools & AI", duration: "طوال فترة الدراسة", desc: "مساعد برمجي مدعوم بالذكاء الاصطناعي يقترح عليك الكود وأنت بتكتب.", offer: "وصول مجاني كامل لـ Copilot.", benefit: "بيوفر عليك وقت كبير جداً. بيكتبلك الفانكشنات المعقدة، بيحللك المشاكل (Bugs)، وبيكتبلك الـ Tests. زي ما يكون عندك Senior Developer بيساعدك تكتب كود أسرع وأنظف." },
+            { name: "JetBrains", category: "Dev Tools & AI", duration: "سنة واحدة (قابل للتجديد)", desc: "بيئات تطوير احترافية (IDEs) للعديد من اللغات مثل IntelliJ, PyCharm, WebStorm.", offer: "اشتراك مجاني كامل للطلاب (يتجدد سنوياً).", benefit: "أقوى برامج البرمجة في العالم. لو بتشتغل Java, Python, أو JS، الـ IDEs دي فيها مساعد ذكي، تصحيح أخطاء تلقائي، وإكمال كود بيخليك تبرمج بسرعة وراحة." },
+            { name: "Visual Studio Code Coding Packs", category: "Dev Tools & AI", duration: "مجاني للأبد", desc: "حزم جاهزة من مايكروسوفت لبدء البرمجة فوراً.", offer: "حزم تتضمن VS Code والإضافات الأساسية لـ Java, Python, أو .NET.", benefit: "بدل ما تروح تنزل اللغة والإضافات والكونفيجريشن لوحدك، الحزمة دي بتعملك كل حاجة جاهزة بـ Click واحدة عشان تبدأ تبرمج فوراً." },
+            { name: "GitKraken", category: "Git Tools", duration: "6 أشهر (ثم خصم 80%)", desc: "عميل Git شهير بواجهة رسومية مذهلة لسهولة إدارة الكود.", offer: "خطة الطلاب المجانية لمدة 6 أشهر، ثم خصم 80%.", benefit: "لو بتعاني من كتابة أوامر Git في الـ Terminal، البرنامج ده بيحول الكود لشجرة بصرية (Graph) تقدر تعمل Merge و Pull Request بسهولة بالدغتين." },
+            { name: "GitLens", category: "Git Tools", duration: "6 أشهر (ثم خصم 80%)", desc: "الإضافة رقم 1 لـ VS Code لتوسيع قدرات Git.", offer: "خطة الطلاب المجانية لمدة 6 أشهر، ثم خصم 80%.", benefit: "بيعرفك مين كتب كل سطر كود ومتى (Blame)، وبيخليك تتابع الـ Pull Requests من جوه الـ VS Code من غير ما تروح المتصفح." },
+            { name: "Tower", category: "Git Tools", duration: "طوال فترة الدراسة", desc: "عميل Git قوي لـ Mac و Windows.", offer: "رخصة مجانية لنسخة Pro.", benefit: "بديل ممتاز لـ GitKraken، بيوفرلك واجهة نظيفة لإدارة المستودعات المعقدة والـ Merges الصعبة بكل احترافية." },
+            { name: "GitHub Desktop", category: "Git Tools", duration: "مجاني للأبد", desc: "برنامج رسمي من GitHub لتسهيل عمليات Git.", offer: "مفتوح المصدر ومجاني للجميع.", benefit: "خفيف وسهل جداً للمبتدئين اللي لسه متعلمين Git وعايزين يرفعوا كودهم على GitHub من غير أوامر نصية معقدة." },
+            { name: "WorkingCopy", category: "Git Tools", duration: "طوال فترة الدراسة", desc: "عميل Git قوي لأجهزة iPhone و iPad.", offer: "كل ميزات Pro مجانية.", benefit: "لو من عشاق البرمجة من الموبايل أو الآيباد، التطبيق ده يخليك تعدل الكود وتعمل Commit و Push وأنت في السير أو بعيد عن اللابتوب." },
+            { name: "Imgbot", category: "Git Tools", duration: "طوال فترة الدراسة", desc: "بوت على GitHub يعمل ضغط تلقائي لصور مشروعك.", offer: "تحسين صور مجاني للمستودعات العامة والخاصة.", benefit: "بيقلل حجم الصور في مشروعك من غير ما يؤثر على جودتها، وده بيخلي الموقع أو التطبيق يفتح أسرع ومستودع الـ Git يكون أصغر حجماً." },
+            { name: "GitHub Pro", category: "Git Tools", duration: "طوال فترة الدراسة", desc: "حساب GitHub الاحترافي.", offer: "ترقية مجانية لحساب Pro.", benefit: "بيديك مستودعات خاصة (Private Repos) غير محدودة، وده مهم جداً عشان تحط كودك الشخصي ومشاريعك بعيد عن عيون الناس." },
+
+            // Web & Mobile Dev
+            { name: "Bootstrap Studio", category: "Web & Mobile", duration: "طوال فترة الدراسة", desc: "تطبيق سطح مكتب قوي لإنشاء مواقع متجاوبة باستخدام إطار عمل Bootstrap.", offer: "رخصة مجانية.", benefit: "بدل ما ترسم الموقع وتكتب الـ CSS من الصفر، البرنامج ده بيديك مكونات جاهزة بتسحبها وتفلتها (Drag & Drop) وبيطلع كود نظيف، ميزة رهيبة للـ Frontend." },
+            { name: "Polypane", category: "Web & Mobile", duration: "سنة واحدة", desc: "متصفح ثوري للمطورين لإنشاء مواقع ويب أفضل وأسرع.", offer: "خطة الأفراد مجانية لمدة سنة.", benefit: "بيعرضلك الموقع على أكتر من حجم شاشة في نفس الوقت (موبايل، تابلت، ديسكتوب). فبدل ما بتعمل Resize للمتصفح، بتشوف التعديلات في كل المقاسات مرة واحدة." },
+            { name: "Vaadin", category: "Web & Mobile", duration: "طوال فترة الدراسة", desc: "إطار عمل Java مفتوح المصدر لبناء تطبيقات الويب التقدمية (PWA).", offer: "رخصة Pro مجانية.", benefit: "لو مطور Java وبتكره الـ JavaScript والـ CSS، إطار العمل ده يخليك تعمل واجهات ويب حديثة باستخدام Java بس." },
+            { name: "Themeisle (Neve)", category: "Web & Mobile", duration: "سنة واحدة", desc: "قوالب ووردبريس احترافية متوافقة مع الهاتف أولاً.", offer: "سنة مجانية من قالب Neve Agency.", benefit: "لو بتبني مواقع لووردبريس لعملاء أو لمشروعك، القالب ده خفيف جداً وسريع وبيوفرلك إعدادات تصميم مبهرة من غير ما تكتب كود." },
+            { name: "Pageclip", category: "Web & Mobile", duration: "طوال فترة الدراسة", desc: "سيرفر لمواقع الـ الثابتة ونماذج HTML.", offer: "الخطة الأساسية مجانية.", benefit: "لما تعمل موقع بسيط (HTML/CSS) وعايز تعمل Form (زي Contact Us)، مش محتاج تبني Backend. Pageclip بيستقبل الداتا ويبعتها لبريدك." },
+            { name: "BrowserStack", category: "Web & Mobile", duration: "سنة واحدة", desc: "اختبار تطبيقاتك على أجهزة حقيقية في السحابة.", offer: "خطة Automate Mobile مجانية (مستخدم واحد، جهاز موازي واحد) لمدة سنة.", benefit: "مش محتاج تشتري كل أنواع الموبايلات (iPhone, Samsung, Pixel) عشان تختبر تطبيقك. الموقع بيديك موبايلات حقيقية اونلاين تختبر عليها التطبيق." },
+            { name: "LambdaTest", category: "Web & Mobile", duration: "سنة واحدة", desc: "اختبار متقاطع للمتصفحات (Cross-browser) على 2000+ نظام.", offer: "خطة Live مجانية لمدة سنة.", benefit: "زي BrowserStack، بيخليك تتأكد إن الموقع أو التطبيق بتاعك شغال على متصفحات وموبايلات مختلفة من غير ما تشتري أجهزة." },
+            { name: "Appwrite", category: "Web & Mobile", duration: "طوال فترة الدراسة", desc: "منصة مفتوحة المصدر توفر Backend جاهز لتطبيقات الويب والموبايل والـ AI.", offer: "خطة التعليم (مشروعين بموارد خطة Pro بقيمة 40$/شهر).", benefit: "مطور الموبايل (Flutter/React Native) غالباً بيكره بناء الـ Backend. Appwrite بيديك Auth, Database, Storage جاهزين، فتركز على تصميم التطبيق بس." },
+            { name: "Xojo", category: "Web & Mobile", duration: "طوال فترة الدراسة", desc: "أداة تطوير متعددة المنصات لصنع تطبيقات Desktop, Mobile, Web.", offer: "رخصة Xojo Pro مجانية.", benefit: "بتكتب كود مرة واحدة، والبرنامج بيحوله لتطبيق Windows, Mac, iOS, و Android. ممتاز لو عايز تعمل تطبيق سريع لكل المنصات." },
+
+            // Databases & Data Science
+            { name: "MongoDB", category: "Data Science & Databases", duration: "رصيد لمرة واحدة / شهور", desc: "قاعدة بيانات NoSQL مرنة وموزعة مصممة للعصر الحديث.", offer: "رصيد 50 دولار + وصول لـ MongoDB Compass و MongoDB University + شهادة مجانية بقيمة 150 دولار.", benefit: "أهم قاعدة بيانات للمطورين اليوم. الرصيد يكفي لتشغيل مشروع Backend كامل، والشهادة المجانية بتضيف وزن كبير للـ CV بتاعك." },
+            { name: "SQLGate", category: "Data Science & Databases", duration: "سنة واحدة", desc: "بيئة تطوير قوية لإدارة عدة قواعد بيانات SQL.", offer: "وصول لميزات الاشتراك القياسي لمدة سنة.", benefit: "بيوفرلك واجهة سهلة تتعامل بيها مع قواعد البيانات (MySQL, PostgreSQL)، تعمل Queries، وتعدل الداتا بسلاسة من غير أوامر معقدة." },
+            { name: "PopSQL", category: "Data Science & Databases", duration: "طوال فترة الدراسة", desc: "محرر SQL تعاوني وحديث لفريقك — اكتب الاستعلامات، شاهد الداتا، وشارك النتائج.", offer: "اشتراك Premium مجاني.", benefit: "لو بتعمل Data Analysis أو بتعمل شات مع فريق على الداتا، البرنامج ده بيخليكم تكتبوا الـ Queries مع بعض وتعملوا رسوم بيانية (Charts) بسرعة." },
+            { name: "Deepnote", category: "Data Science & Databases", duration: "طوال فترة الدراسة", desc: "نوع جديد من الـ Notebooks المخصصة لعلم البيانات والتعاون.", offer: "خطة Team مجانية كاملة.", benefit: "بديل ممتاز لـ Jupyter Notebook. بيشتغل في المتصفح، يخليك تعمل Analysis للداتا وتكتب كود Python بسهولة وتشاركه مع دكاترة أو زمايلك بـ Link." },
+            { name: "DataCamp", category: "Data Science & Databases", duration: "3 أشهر", desc: "منصة تعليمية لتعلم علم البيانات والتحليل.", offer: "3 أشهر وصول مجاني.", benefit: "لو عايز تدخل مجال الـ Data Science من الصفر، المنصة دي بتديك كورسات تفاعلية في Python, SQL, R عشان تتعلم وتنافس في سوق العمل." },
+            { name: "CARTO", category: "Data Science & Databases", duration: "سنتين", desc: "منصة لتحليل وعرض البيانات المكانية (Spatial Data) والخرائط.", offer: "ترقية حساب مجانية بميزات احترافية لمدة سنتين.", benefit: "لو بتشتغل على مشاريع بتعتمد على الخرائط (زي تطبيقات التوصيل أو تحليلات العقارات)، المنصة دي هتساعدك تعمل رسوم بيانية خرافية للخرائط." },
+
+            // Security & DevOps
+            { name: "1Password", category: "Security & Auth", duration: "سنة واحدة", desc: "مدير كلمات مرور لحفظ بياناتك بأمان تام.", offer: "سنة مجانية تتضمن أدوات المطورين.", benefit: "المطورين بيشتغلوا بمفاتيح API وكلمات سر كتير. بدل ما تحطها في الكود (وده غلطة أمنية قاتلة)، 1Password بيخليك تحفظها بأمان وتجيبها في الكود بشكل آمن." },
+            { name: "Dashlane", category: "Security & Auth", duration: "6 أشهر", desc: "مدير كلمات مرور سحابي ذكي.", offer: "اشتراك Premium مجاني لمدة 6 أشهر.", benefit: "زي 1Password، بيحفظ كلمات السر وبيتنبيهك لو في تسريب لبياناتك، ومفيد جداً إنك تعمل كلمات سر معقدة لكل موقع من غير ما تحفظها." },
+            { name: "AstraSecurity", category: "Security & Auth", duration: "6 أشهر", desc: "مجموعة أمان للمواقع (جدار حماية، فحص برمجيات خبيثة).", offer: "وصول مجاني لجدار الحماية والماسح لمدة 6 أشهر.", benefit: "لو رفعت موقعك وعايز تتأكد إنه مش سهل الاختراق، الأداة دي بتعملك Scan شامل وبتسد الثغرات الأمنية الأكثر شيوعاً." },
+            { name: "Doppler", category: "Security & Auth", duration: "طوال فترة الدراسة", desc: "طريقة مختلفة لإدارة الأسرار والـ API Keys.", offer: "اشتراك Team مجاني.", benefit: "بيخليك تدي الـ API Keys و الـ Passwords لفريقك أو تطبيقك من غير ما تحطها في الـ GitHub، وبيراقب أي تغيير فيها." },
+            { name: "Clerk", category: "Security & Auth", duration: "طوال فترة الدراسة", desc: "خدمة توفر تسجيل الدخول وإدارة المستخدمين وجداول الأسعار.", offer: "خطة Pro مجانية.", benefit: "بدل ما تبني نظام Login واشتراكات مدفوعة من الصفر، Clerk بيديك Components جاهزة تضيفها في الكود وتخلي المستخدمين يسجلوا ويدفعوا بسهولة." },
+            { name: "Travis CI", category: "Monitoring & Testing", duration: "طوال فترة الدراسة", desc: "منصة تكامل مستمر (CI) للمشاريع المفتوحة والخاصة.", offer: "بناء خاص (Private builds) مجاني.", benefit: "أنت بتعمل Push للكود على GitHub، Travis بيشتغل تلقائي، بيجري الـ Tests، ولو ناجحة بيقبلك الكود. ده أساس الـ DevOps وبيضمن إن الكود بتاعك شغال." },
+            { name: "Sentry", category: "Monitoring & Testing", duration: "سنة واحدة", desc: "تتبع الأخطاء في أي لغة برمجة.", offer: "خطة Team مجانية (50K خطأ، 100K معاملة) لمدة سنة.", benefit: "لو تطبيقك اتعطل أو ظهر Error للمستخدم، Sentry بيبلغك فوراً بالخطأ والسطر اللي سببه، بدل ما المستخدم يزعل ويمشي وماتعرفش فين الغلطة." },
+            { name: "Datadog", category: "Monitoring & Testing", duration: "سنتين", desc: "مراقبة السحابة والبنية التحتية.", offer: "حساب Pro (10 سيرفرات) مجاني لمدة سنتين.", benefit: "بيعرفك هل السيرفر بتاعك واقع ولا الـ RAM بتاعتك خلصت، وبيديك شاشات (Dashboards) رهيبة تعرف صحة السيرفر وتطبيقك في أي وقت." },
+            { name: "New Relic", category: "Monitoring & Testing", duration: "طوال فترة الدراسة", desc: "منصة مراقبة لفهم وتحسين أداء البرمجيات.", offer: "وصول مجاني كامل (بقيمة 300$/شهر).", benefit: "بتشوف مكان البطء في الموقع (مثلاً الداتابيز بتاخر ولا الـ API)، وبتحلل أداء التطبيق عشان يبقى أسرع." },
+            { name: "Honeybadger", category: "Monitoring & Testing", duration: "سنة واحدة", desc: "السلاح السري لمطوري الويب: مراقبة الأخطاء والوقت.", offer: "حساب Small مجاني لمدة سنة.", benefit: "زي Sentry بس أبسط، بيبلغك لو الموقع وقع وبيديك تفاصيل كافية تصلح بيها المشكلة في دقائق." },
+            { name: "Blackfire", category: "Monitoring & Testing", duration: "طوال فترة الدراسة", desc: "أداة لقياس وتحسين أداء الكود.", offer: "اشتراك Developer مجاني.", benefit: "بيعرفك أنت ماسك الـ Code فين ومخليه بطيء (Bottlenecks)، وبيقترح عليك تحسينات عشان التطبيق يشتغل بسرعة الصاروخ." },
+            { name: "Codecov", category: "Monitoring & Testing", duration: "طوال فترة الدراسة", desc: "أداة لتتبع مدى تغطية الكود بالاختبارات (Code Coverage).", offer: "وصول مجاني للمستودعات العامة والخاصة.", benefit: "بيعرفك النسبة المئوية للكود اللي عليها Tests، فتتأكد إنك مش هتكسر فانكشن قديمة لما تضيف كود جديد." },
+            { name: "DeepScan", category: "Monitoring & Testing", duration: "6 أشهر", desc: "منصة لاكتشاف أخطاء الجودة في كود JavaScript.", offer: "تجربة مجانية لمدة 6 أشهر.", benefit: "بيكشفلك الـ Bad Practices والـ Bugs في كود الـ React أو الـ Vue بتاعك قبل ما يشتغل، وبيحسن جودة الكود." },
+            { name: "DevCycle", category: "Monitoring & Testing", duration: "سنة واحدة", desc: "منصة إدارة الـ Feature Flags (الميزات التجريبية).", offer: "سنة مجانية على خطة Starter.", benefit: "بتخليك تضيف ميزة جديدة في تطبيقك بس تطلعها لـ 5% من المستخدمين كتجربة، ولو ناجحة تشغلها للكل، ولو فاشلة تطفيها من غير ما تعمل Update للتطبيق." },
+            { name: "ConfigCat", category: "Monitoring & Testing", duration: "مجاني للأبد (لكن بحدود)", desc: "خدمة تعلم وإدارة الـ Feature Flags.", offer: "1000 Feature Flag وعدد غير محدود من المستخدمين مجاناً.", benefit: "بديل مفتوح المصدر لـ DevCycle، بتتعلم عليه إزاي تتحكم في تشغيل وإطفاء الميزات بتاعت التطبيق عن بعد." },
+            { name: "Requestly", category: "Monitoring & Testing", duration: "سنة واحدة", desc: "أداة لاعتراض وتعديل طلبات الـ HTTP لتسهيل اختبار الـ APIs.", offer: "خطة Professional مجانية لمدة سنة.", benefit: "لو بتبرمج Frontend والـ Backend لسه مش جاهز، التطبيق ده بيخليك تعمل Mock للـ APIs وتجيب داتا وهمية عشان تكمل شغلك من غير ما تستنى حد." },
+
+            // Design & UI/UX
+            { name: "IconScout", category: "Design & Assets", duration: "سنة واحدة", desc: "سوق للموارد التصميمية أيقونات، رسوميات 3D، ورسوم متحركة.", offer: "60 أيقونة مميزة مجانية كل شهر لمدة سنة.", benefit: "لو مش مصمم وعايز تجمل موقعك أو تطبيقك، تقدر تنزل أيقونات احترافية من غير ما تدفع." },
+            { name: "Icons8", category: "Design & Assets", duration: "3 أشهر", desc: "موارد تصميم: أيقونات، صور، رسوميات، وموسيقى.", offer: "اشتراك 3 أشهر مجاني يتضمن كل الموارد.", benefit: "بيديك وصول لآلاف الأيقونات والصور الفوتوغرافية عشان تستخدمها في الـ UI/UX بتاع تطبيقك من غير مشاكل حقوق طبع ونشر." },
+            { name: "Visme", category: "Design & Assets", duration: "3 أشهر", desc: "منصة لإنشاء عروض تقديمية تفاعلية ورسوم بيانية.", offer: "3 أشهر مجانية من خطة Starter.", benefit: "لما تعرض مشروع التخرج بتاعك، مش هتحتاج تعمل PowerPoint ممل. Visme بيديك قوالب تفاعلية تجذب انتباه الدكاترة والجمهور." },
+            { name: "Octicons", category: "Design & Assets", duration: "مجاني للأبد", desc: "مكتبة أيقونات مفتوحة المصدر مصممة خصيصاً لواجهة GitHub.", offer: "ملفات تصميم Figma جاهزة.", benefit: "لو مصمم أو مبرمج Frontend وعايز تستخدم نفس شكل الأيقونات المعتادة في GitHub في مشاريعك، دي المكتبة الرسمية ليها." },
+
+            // Education & Learning
+            { name: "FrontendMasters", category: "Education & Career", duration: "6 أشهر", desc: "دورات متقدمة في JavaScript, Node.js وهندسة الـ Frontend.", offer: "وصول مجاني لكل الدورات لمدة 6 أشهر.", benefit: "من أقوى المنصات عشان تتعلم الـ Frontend بعمق. فيها كورسات للمستوى المتقدم جداً مش هتلاقيها في مكان تاني." },
+            { name: "Educative", category: "Education & Career", duration: "6 أشهر", desc: "بيئة تعليمية تعتمد على النص والـ Playgrounds التفاعلية.", offer: "6 أشهر وصول مجاني لـ 70+ كورس.", benefit: "بتتعلم برمجة من غير ما تضيع وقت في إعداد البيئة (Setup)، بتكتب الكود جوه المتصفح وتتعلم المفاهيم بسرعة." },
+            { name: "Boot.dev", category: "Education & Career", duration: "3 أشهر", desc: "منصة تعليمية تشبه الألعاب لتعلم البرمجة الخلفية (Backend) والـ DevOps.", offer: "3 أشهر وصول مجاني.", benefit: "بتعلمك Python و Go و Backend بطريقة ممتعة ومنظمة خطوة بخطوة من الصفر لحد الاحتراف." },
+            { name: "Codedex", category: "Education & Career", duration: "6 أشهر", desc: "منصة تعليم برمجة موجهة لجيل Z بأسلوب ممتع.", offer: "6 أشهر مجانية للعضوية المميزة (Club).", benefit: "لو مبتدئ ومش عايز الطريقة الأكاديمية المملة، المنصة دي بتعلمك HTML, CSS, Python على شكل تحديات ومغامرات." },
+            { name: "Scrimba", category: "Education & Career", duration: "شهر واحد", desc: "منصة تعليم تفاعلية فريدة للـ Frontend.", offer: "شهر مجاني لكورسات Pro.", benefit: "أنت مش بس بتتفرج على الفيديو، تقدر تعدل على كود المدرس وأنت بتشوف الفيديو! طريقة رهيبة لتعلم React و JavaScript بسرعة." },
+            { name: "SymfonyCasts", category: "Education & Career", duration: "3 أشهر", desc: "دورات احترافية لتعلم PHP وإطار عمل Symfony.", offer: "3 أشهر اشتراك مجاني.", benefit: "لو بتشتغل على PHP، أفضل مكان تتعلم فيه المفاهيم المتقدمة وبناء تطبيقات الويب القوية." },
+            { name: "GoRails", category: "Education & Career", duration: "سنة واحدة", desc: "دورات لتعلم إطار عمل Ruby on Rails.", offer: "وصول مجاني لكل الفيديوهات لمدة 12 شهر.", benefit: "لو عايز تتعلم إطار العمل ده اللي بيبني مواقع في أيام، المنصة دي هي المرجع الأول عالمياً." },
+            { name: "GitHub Certification Voucher", category: "Education & Career", duration: "كوبون لمرة واحدة", desc: "شهادة معتمدة من GitHub تثبت مهاراتك.", offer: "كوبون مجاني لاختبار Foundations أو Copilot بتتجدد كل فترة والعرض ده بيكون ساري حتى نفاذ الكمية.", benefit: "الشهادة دي حاجة جديدة وقوية تضيفها للـ CV وبتثبت لأي شركة إنك فاهم الـ Git و GitHub كويس جداً." },
+            { name: "InterviewCake", category: "Education & Career", duration: "أسبوع واحد", desc: "دورة إعداد لمقابلات البرمجة والخوارزميات.", offer: "وصول كامل للكورس لمدة أسبوع.", benefit: "لو عندك مقابلة شغل والـ Algorithms بتوجع رأسك، الأسبوع ده كفاية تعرف إزاي تحل أسئلة الـ Data Structures اللي بتسألها الشركات الكبيرة." },
+            { name: "AlgoExpert", category: "Education & Career", duration: "محدود (أسئلة مجانية + خصم)", desc: "المصدر الأشمل للاستعداد لمقابلات البرمجة.", offer: "وصول مجاني لـ 20 سؤال + خصم 10% على المنتجات.", benefit: "لو مش قادر تشتري الاشتراك الكامل، الأسئلة المجانية دي تديك فكرة عن مستوى المقابلات في الشركات الكبرى زي Google." },
+            { name: "SlideCoach", category: "Education & Career", duration: "سنة واحدة", desc: "مدرب عروض تقديمية بالذكاء الاصطناعي.", offer: "2000 كريديت مجاني (تكفي لـ 40 جلسة تدريب) لمدة سنة.", benefit: "بيسمعك وانت بتعرض ويديك Feedback فوري على لغة جسمك، سرعتك، وطريقة إلقائك عشان تبقى مستعد لأي عرض مشروع أو مقابلة شخصية." },
+            { name: "GitHub Community Exchange", category: "Education & Career", duration: "طوال فترة الدراسة", desc: "مجتمع طلابي داخل GitHub لتبادل المشاريع.", offer: "مساحة لعرض مشروعك وإيجاد فريق.", benefit: "تقدر تلاقي زمايل يعملوا معاك مشروع، أو تساهم في مشروع طالب تاني وتتعلم منهم، وده بيبنيلك Portfolio قوي." },
+            { name: "Github Campus Experts", category: "Education & Career", duration: "طوال فترة الدراسة", desc: "برنامج لبناء مجتمعات تقنية داخل الجامعة.", offer: "التقديم للبرنامج والدعم من GitHub.", benefit: "لو بتحب تعمل Events أو Tech Community في كليتك، GitHub بتدربك وبتدعمك عشان تبقى قائد تقني في جامعتك وده بيفتح بيبان توظيف ضخمة." },
+
+            // Productivity
+            { name: "Notion", category: "Productivity", duration: "طوال فترة الدراسة", desc: "مساحة عمل واحدة للتفكير والكتابة والتخطيط وإدارة المشاريع.", offer: "خطة Education مع استجابات AI مجانية.", benefit: "أقوى أداة لتنظيم حياتك الجامعية. تعمل بيها To-Do lists، تاخد بيها مذكرات، وتتبع مشاريعك، والـ AI بيلخصلك الدروس ويكتبلك كود." },
+            { name: "Notion Template Collection", category: "Productivity", duration: "مجاني للأبد", desc: "مجموعة قوالب جاهزة من Notion لطلاب الكمبيوتر.", offer: "قوالب لإدارة الكورسات، الهاكاثونات، والبورتفوليو.", benefit: "مش محتاج تبني نظام التنظيم من الصفر، القوالب دي جاهزة ومصممة خصيصاً عشان تنظم دراستك ومشاريعك البرمجية." },
+            { name: "PomoDone", category: "Productivity", duration: "سنتين", desc: "تطبيق لتتبع الوقت وزيادة الإنتاجية بتقنية البومودورو.", offer: "خطة Lite مجانية لمدة سنتين.", benefit: "بتقنية الـ 25 دقيقة شغل و 5 دقائق راحة، التطبيق ده بيمنعك من الاحتراق الوظيفي (Burnout) أثناء البرمجة أو المذاكرة." },
+            { name: "HazeOver", category: "Productivity", duration: "طوال فترة الدراسة", desc: "تطبيق للـ Mac لتقليل التشتت.", offer: "رخصة مجانية للتطبيق.", benefit: "بيغمي على كل الشبابيك اللي مش شغال عليها، فتركز بس على الكود أو البحث اللي قدامك، ميزة رهيبة لو بتتشتت بسهولة." },
+
+            // IoT & Hardware
+            { name: "Arduino", category: "IoT & Hardware", duration: "6 أشهر", desc: "إمبراطورية الإلكترونيات مفتوحة المصدر للمشاريع الإبداعية.", offer: "Arduino Cloud مجاني لمدة 6 أشهر + خصومات على الهاردوير.", benefit: "لو عايز تعمل مشروع Smart Home أو روبوت، المنصة دي هتخليك تبرمج البورد وتراقبها من السحابة وتربطها بالإنترنت." },
+            { name: "Adafruit", category: "IoT & Hardware", duration: "سنة واحدة", desc: "شركة متخصصة في الهاردوير مفتوح المصدر والتعليم.", offer: "سنة مجانية من Adafruit IO+ وخصومات على القطع.", benefit: "Adafruit IO بتخليك توصل القطع الإلكترونية (Sensors) بالإنترنت بسهولة وتبعت وتستقبل داتا من غير تعقيدات الشبكات." },
+
+            // APIs & Extras
+            { name: "Stripe", category: "APIs & Infrastructure", duration: "حتى 1000 دولار إيراد", desc: "بوابة دفع للمواقع والتطبيقات مصممة للمطورين.", offer: "إعفاء من رسوم المعاملات على أول 1000 دولار إيرادات.", benefit: "لما تبني موقع وتحب تبيع منتج أو خدمة، مش هتدفع رسوم لـ Stripe على أول 1000 دولار تجيبهم، بمعنى إن الدفع هيبقى مجاني لحد ما مشروعك يكبر." },
+            { name: "Termius", category: "APIs & Infrastructure", duration: "طوال فترة الدراسة", desc: "عميل SSH بيشتغل على الموبايل والديسكتوب.", offer: "وصول مجاني لكل ميزات Pro و Team.", benefit: "لو بتتعامل مع سيرفرات، التطبيق ده بيخليك تدخل على السيرفر وتكتب الأوامر من موبايلك أو أي جهاز تاني مع تشفير عالي." },
+            { name: "Testmail", category: "APIs & Infrastructure", duration: "طوال فترة الدراسة", desc: "خدمة لاختبار استقبال الإيميلات تلقائياً في الكود.", offer: "الخطة الأساسية مجانية.", benefit: "لما تعمل System بيبعت إيميلات (زي تأكيد حساب) وعايز تختبره برمجياً، التطبيق بيديك APIs تسحب بيها الإيميل وتتأكد إنه وصل." },
+            { name: "Zyte", category: "APIs & Infrastructure", duration: "مجاني للأبد (خطة محدودة)", desc: "منصة سحابية لتشغيل عناكب الويب (Web Crawlers) تلقائياً.", offer: "وحدة Scrapy Cloud مجانية للأبد.", benefit: "لو بتعمل Web Scraping (سحب بيانات من مواقع تانية)، المنصة دي بتشغللك السكريبت بتاعك في السحابة باستمرار من غير ما جهازك يبقى شغال." },
+            { name: "Blockchair", category: "APIs & Infrastructure", duration: "استخدام لمرة واحدة (100,000 طلب)", desc: "واجهات برمجة تطبيقات (APIs) احترافية لعالم العملات الرقمية.", offer: "100,000 طلب API مجاني.", benefit: "لو عايز تعمل مشروع يتتبع أسعار الكريبتو أو تحليل البلوك تشين، الـ Requests المجانية دي هتكفيك جداً في البداية." },
+            { name: "SimpleAnalytics", category: "APIs & Infrastructure", duration: "سنة واحدة", desc: "أداة تحليلات مواقع تحترم الخصوصية.", offer: "خطة Starter مجانية لمدة سنة.", benefit: "بديل لـ Google Analytics، بتديك إحصائيات عن زوار موقعك من غير ما تقتحم خصوصيتهم وبدون الكوكيز المزعجة." },
+            { name: "Appfigures", category: "APIs & Infrastructure", duration: "سنة واحدة", desc: "تحليلات وتحسين متاجر التطبيقات (ASO).", offer: "وصول مجاني للتحليلات وتقارير الأداء لمدة سنة.", benefit: "لو نزلت تطبيق على App Store أو Google Play، التطبيق ده بيديك داتا عن التنزيلات والمنافسين وبيساعدك تزود تقييمات تطبيقك." },
+            { name: "POEditor", category: "APIs & Infrastructure", duration: "سنة واحدة", desc: "منصة لإدارة ترجمة التطبيقات والمواقع.", offer: "خطة Plus مجانية لمدة سنة.", benefit: "لو عايز تطبيقك يشتغل بأكتر من لغة، المنصة دي بتسهل إنك تترجم النصوص وتنسقها مع المبرمجين والمترجمين." },
+            { name: "ToDiagram", category: "APIs & Infrastructure", duration: "طوال فترة الدراسة", desc: "محرر بيانات تفاعلي بيحول الـ JSON والـ XML لرسوم بيانية قابلة للتعديل.", offer: "خطة Pro (بدون حدود للداتا) مجانية.", benefit: "لو قدامك داتا JSON كبيرة ومعقدة ومش فاهمها، التطبيق ده بيحولها لـ Flowchart تقدر تفهمها وتعدلها بسهولة." }
+        ];
+
+        // تجميد البيانات لأمان الموقع
+        const experiencesData = Object.freeze(rawExperiences);
+        const toolsData = Object.freeze(rawTools);
+
+        const categories = [...new Set(toolsData.map(t => t.category))].sort();
+        const durations = [...new Set(toolsData.map(t => t.duration))].sort();
+
+        let currentTab = 'category';
+        let currentFilter = 'الكل';
+
+        // دالة البحث الذكي (تتجاهل المسافات والهمزات والتشكيل)
+        function smartSearch(text, query) {
+            const normalize = str => str.toLowerCase()
+                .replace(/\s+/g, '') // مسح المسافات
+                .replace(/[ًٌٍَُِّْ]/g, '') // مسح التشكيل
+                .replace(/[أإآا]/g, 'ا'); // توحيد الهمزات
+            return normalize(text).includes(normalize(query));
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active-view'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewName + '-view').classList.add('active-view');
+            event.target.classList.add('active');
+            if(viewName === 'home') {
+                document.getElementById('homeSearchInput').value = '';
+                renderHome();
+            }
+        }
+
+                function scrollToOffers() {
+            // التأكد إننا في صفحة الرئيسية
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active-view'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.getElementById('home-view').classList.add('active-view');
+            document.querySelector('.nav-link[onclick="switchView(\'home\')"]').classList.add('active');
+
+            // مسح أي بحث موجود وإعادة عرض الصفحة كاملة
+            document.getElementById('homeSearchInput').value = '';
+            renderHome();
+
+            // النزول بملل لقسم العروض
+            document.getElementById('offersTitle').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            currentFilter = 'الكل';
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderFilterButtons();
+            renderFilterCards();
+        }
+
+        function renderFilterButtons() {
+            const filterGroup = document.getElementById('filterButtons');
+            const items = currentTab === 'category' ? categories : durations;
+            filterGroup.innerHTML = `<button class="filter-btn active" onclick="setFilter('الكل', this)">الكل</button>`;
+            items.forEach(item => {
+                filterGroup.innerHTML += `<button class="filter-btn" onclick="setFilter('${item}', this)">${item}</button>`;
+            });
+        }
+
+        function setFilter(filter, element) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            renderFilterCards();
+        }
+
+        function renderExperiences() {
+            document.getElementById('expGrid').innerHTML = experiencesData.map(exp => `
+                <div class="exp-card">
+                    <div class="exp-icon"><i class="fas ${exp.icon}"></i></div>
+                    <h3 class="exp-name">${exp.name}</h3>
+                    <p class="exp-desc">${exp.desc}</p>
+                    <ul class="exp-list">
+                        <li><strong>هتفيدك في إيه؟</strong> ${exp.benefit}</li>
+                        <li><strong>هتعلملك إيه؟</strong> ${exp.teach}</li>
+                    </ul>
+                    <div class="exp-partners">
+                        <strong style="color:var(--text-main); font-size: 0.9rem;">الخدمات الداخلة في المهارة:</strong><br>
+                        ${exp.partners.map(p => `<span class="partner-badge">${p}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCards(data, gridId) {
+            const grid = document.getElementById(gridId);
+            if (data.length === 0) {
+                grid.innerHTML = `<div class="no-results"><i class="fas fa-search"></i><br>لا توجد نتائج مطابقة</div>`;
+                return;
+            }
+            grid.innerHTML = data.map(tool => `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">${tool.name}</div>
+                        <div class="duration-badge"><i class="fas fa-clock"></i> ${tool.duration}</div>
+                    </div>
+                    <div class="category-tag"><i class="fas fa-tag"></i> ${tool.category}</div>
+                    <div class="desc">${tool.desc}</div>
+                    <div class="offer-box">
+                        <div class="offer-title"><i class="fas fa-gift"></i> العرض المقدم:</div>
+                        <div class="offer-text">${tool.offer}</div>
+                    </div>
+                    <div class="benefit-box">
+                        <div class="benefit-title"><i class="fas fa-star"></i> هتفيدني في إيه؟</div>
+                        <div class="benefit-text">${tool.benefit}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+                function renderHome() {
+            const searchTerm = document.getElementById('homeSearchInput').value;
+            let filteredTools = toolsData;
+
+            // العناصر اللي هتتشال لما تبحث
+            const expTitle = document.getElementById('expTitle');
+            const expDesc = document.getElementById('expDesc');
+            const expGrid = document.getElementById('expGrid');
+            const offersTitle = document.getElementById('offersTitle');
+
+            if (searchTerm) {
+                // إخفاء كل حاجة غير نتايج البحث
+                expTitle.style.display = 'none';
+                expDesc.style.display = 'none';
+                expGrid.style.display = 'none';
+                offersTitle.style.display = 'none';
+
+                filteredTools = filteredTools.filter(t => 
+                    smartSearch(t.name, searchTerm) || 
+                    smartSearch(t.desc, searchTerm) ||
+                    smartSearch(t.category, searchTerm) ||
+                    smartSearch(t.benefit, searchTerm)
+                );
+            } else {
+                // إظهار العناصر تاني لما يمسح كلمة البحث
+                expTitle.style.display = 'block';
+                expDesc.style.display = 'block';
+                expGrid.style.display = 'grid';
+                offersTitle.style.display = 'block';
+                
+                // إعادة عرض المهارات لما يكون مفيش بحث
+                renderExperiences();
+            }
+            
+            renderCards(filteredTools, 'homeGrid');
+        }
+
+        function renderFilterCards() {
+            let filtered = toolsData;
+            if (currentFilter !== 'الكل') {
+                if (currentTab === 'category') filtered = filtered.filter(t => t.category === currentFilter);
+                else filtered = filtered.filter(t => t.duration === currentFilter);
+            }
+            renderCards(filtered, 'filterGrid');
+        }
+
+        // Initial Render
+        renderExperiences();
+        renderHome();
+        renderFilterButtons();
+        renderFilterCards();
+
+        document.getElementById('homeSearchInput').addEventListener('input', renderHome);
+    </script>
+</body>
+</html>
